@@ -2,13 +2,10 @@ const Post = require('../models/post.model.js');
 
 
 // Create and Save a new post
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Validate request
-    if(!req.body) {
-        return res.status(400).send({
-            message: "Post content can not be empty"
-        });
-    }
+    if(!req.body)
+        res.status(400).json({message: "Post content can not be empty"});
 
     // Create a post
     const post = new Post({
@@ -18,103 +15,92 @@ exports.create = (req, res) => {
     });
 
     // Save post in the database
-    post.save()
-    .then(data => {
-        res.json(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while creating the Post."
-        });
-    });
+    try{
+        const Post = await post.save();
+        res.json(Post)
+    }
+    catch(err){
+        res.status(500).json({message : (err || "Some error occured while creating the post!")})
+    }
+    
 };
 
 // Retrieve and return all posts from the database.
-exports.findAll = (req, res) => {
-Post.find()
-    .then(posts => {
-        res.json(posts);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while retrieving posts."
-        });
-    });
+exports.findAll = async (req, res) => {
+    try{
+        const Posts = await Post.find();
+        res.json(Posts);
+    }
+    catch(err){
+        res.status(500).json({message : (err || "Some error occurred while retrieving posts.")})
+    }
 };
 
 // Find a single post with a postId
-exports.findOne = (req, res) => {
-Post.findById(req.params.postId)
-    .then(post => {
-        if(!post) {
-            return res.status(404).send({
-                message: "Post not found with id " + req.params.postId
-            });            
-        }
-        res.json(post);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Post not found with id " + req.params.postId
-            });                
-        }
-        return res.status(500).send({
-            message: "Error retrieving post with id " + req.params.postId
-        });
-    });
+exports.findOne = async (req, res) => {
+    try{
+        const singlePost = await Post.findById(req.params.postId);
+        if(!singlePost)
+            res.status(404).json({message: "Not found Post with Post ID: "+req.params.postId});
+        else
+            res.json(singlePost);
+    }
+    catch(err){
+        if(err.kind == 'ObjectId')
+            res.status(404).json({message: "Not found Post with Post ID: "+req.params.postId})
+        else
+            res.status(500).json({message: (err || "Some kind of error while retrieving the post!")});
+    }
 };
 
 // Update a post identified by the postId in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
 // Validate Request
-    if(!req.body) {
-        return res.status(400).send({
-            message: "Post content can not be empty"
-        });
-    }
+    if(!req.body)
+        res.status(400).json({message: "Post content can not be empty"});
 
     // Find post and update it with the request body
-    Post.findByIdAndUpdate(req.params.postId, {
+    const updatedPost = await Post.findByIdAndUpdate(req.params.postId, {
         name: req.body.name || "Anonymous",
         title: req.body.title,
         url: req.body.url
     },
-    {new: true})
-    .then(post => {
-        if(!post) {
-            return res.status(404).send({
-                message: "post not found with id " + req.params.postId
-            });
+    {new: true});
+
+    try{
+        if(!updatedPost){
+            res.status(404).json({message: "Post not found with ID: "+req.params.postId});
         }
-        res.json(post);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "post not found with id " + req.params.postId
-            });                
+        else
+            res.json(updatedPost);
+    }
+    catch(err){
+        if(err.kind == 'ObjectId'){
+            res.status(404).json({message: "Post not found with ID: "+req.params.postId});
         }
-        return res.status(500).send({
-            message: "Error updating post with id " + req.params.postId
-        });
-    });
+        else{
+            res.status(500).json({message: (err || "Some kind of error while updating the post!")});
+        }
+    }
 };
 
 // Delete a post with the specified postId in the request
-exports.delete = (req, res) => {
-Post.findByIdAndRemove(req.params.postId)
-    .then(post => {
-        if(!post) {
-            return res.status(404).send({
-                message: "Post not found with id " + req.params.postId
-            });
+exports.delete = async (req, res) => {
+    const deletedPost = await Post.findByIdAndRemove(req.params.postId)
+    try{
+        if(!deletedPost){
+            res.status(404).json({message: "Post not found with ID: "+req.params.postId});
         }
-        res.send({message: "Post deleted successfully!"});
-    }).catch(err => {
-        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-            return res.status(404).send({
-                message: "Post not found with id " + req.params.postId
-            });                
+        else{
+            res.json({message: "Post deleted with ID: "+req.params.postId});
         }
-        return res.status(500).send({
-            message: "Could not delete post with id " + req.params.postId
-        });
-    });
+    }
+    catch(err){
+        if(err.kind == 'ObjectId'){
+            res.status(404).json({message: "Post not found with ID: "+req.params.postId});
+        }
+        else{
+            res.status(500).json({message: (err || "Some kind of error while updating the post!")});
+        }
+    }
 };
