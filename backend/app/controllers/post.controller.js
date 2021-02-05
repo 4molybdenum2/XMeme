@@ -10,14 +10,14 @@ exports.create = async (req, res) => {
     // Create a post
     const post = new Post({
         name: req.body.name || "Anonymous", 
-        title: req.body.title,
+        caption: req.body.caption,
         url: req.body.url
     });
 
     // Save post in the database
     try{
         const Post = await post.save();
-        res.json(Post)
+        res.json({id: Post._id})
     }
     catch(err){
         res.status(500).json({message : (err || "Some error occured while creating the post!")})
@@ -28,7 +28,7 @@ exports.create = async (req, res) => {
 // Retrieve and return all posts from the database.
 exports.findAll = async (req, res) => {
     try{
-        const Posts = await Post.find();
+        const Posts = await Post.find().sort({createdAt: -1}).limit(100);
         res.json(Posts);
     }
     catch(err){
@@ -61,8 +61,7 @@ exports.update = async (req, res) => {
 
     // Find post and update it with the request body
     const updatedPost = await Post.findByIdAndUpdate(req.params.postId, {
-        name: req.body.name || "Anonymous",
-        title: req.body.title,
+        caption: req.body.caption,
         url: req.body.url
     },
     {new: true});
@@ -72,7 +71,10 @@ exports.update = async (req, res) => {
             res.status(404).json({message: "Post not found with ID: "+req.params.postId});
         }
         else
-            res.json(updatedPost);
+            res.json({
+                caption: updatedPost.caption,
+                url: updatedPost.url
+            });
     }
     catch(err){
         if(err.kind == 'ObjectId'){

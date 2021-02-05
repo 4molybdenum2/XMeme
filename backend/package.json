@@ -1,17 +1,17 @@
 {
-  "name": "node-express-crud",
+  "name": "XMeme-Backend",
   "version": "1.0.0",
-  "description": "Node-Express-Crud",
+  "description": "This is the backend of XMeme Application",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "cross-env NODE_ENV=production node server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js"
   },
   "repository": {
     "type": "git",
     "url": ""
   },
-  "author": "",
+  "author": "Tathagata Paul",
   "license": "ISC",
   "bugs": {
     "url": ""
@@ -21,11 +21,13 @@
     "body-parser": "^1.19.0",
     "config": "^3.3.3",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.7.11"
   },
   "devDependencies": {
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.7"
   }
 }

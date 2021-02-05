@@ -1,9 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors')
+const cors = require('cors');
+const dotenv = require('dotenv')
+const morgan = require('morgan')
 // create express app
 const app = express();
 
+dotenv.config({path: './config/config.env'})
+
+if(process.env.NODE_ENV == 'development'){
+    app.use(morgan('dev'))
+}
 //Middlewares
 app.use(cors());
 // parse requests of content-type - application/x-www-form-urlencoded
@@ -19,12 +26,13 @@ const connectDB = require('./config/database.config.js');
 connectDB();
 
 //defining a PORT
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8081;
 
 // define a simple route
 app.get('/', (req, res) => {
-    res.json({"message": "Welcome to XMeme application."});
+    res.json({"message": "Welcome to XMeme application backend."});
 });
+
 require('./app/routes/post.routes.js')(app);
 // listen for requests
 app.listen(PORT, () => {
