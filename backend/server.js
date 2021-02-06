@@ -6,7 +6,9 @@ const morgan = require('morgan')
 // create express app
 const app = express();
 
-dotenv.config({path: './config/config.env'})
+if(process.env.NODE_ENV == 'development'){
+    dotenv.config({path: './config/config.env'})
+}
 
 if(process.env.NODE_ENV == 'development'){
     app.use(morgan('dev'))
