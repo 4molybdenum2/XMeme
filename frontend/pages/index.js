@@ -23,7 +23,7 @@ const Home = ({posts}) => {
   async function deletePost ({post}){
     console.log(post)
     try{
-      const res = await axios.delete(`http://localhost:8081/memes/${post._id}`);
+      const res = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${post._id}`);
       console.log('deleted')
     }
     catch(err){
@@ -44,7 +44,7 @@ const Home = ({posts}) => {
     },
     onSubmit: async (values) => {
       try{
-        const res = await axios.post('http://localhost:8081/memes' , {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}` , {
           name: values.name,
           caption: values.caption,
           url: values.url
@@ -136,7 +136,7 @@ const Home = ({posts}) => {
 // This gets called on every request
 export async function getServerSideProps() {
   // Fetch data from external API
-  const res = await fetch(`http://localhost:8081/memes`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}`)
   const posts = await res.json()
 
   // Pass data to the page via props
