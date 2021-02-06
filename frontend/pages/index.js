@@ -3,11 +3,13 @@ import styles from '../styles/Home.module.css'
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import {Button} from 'react-bootstrap';
+import {Button , Modal} from 'react-bootstrap';
 import Link from 'next/link'
+import {useState} from 'react'
+
 
 const Home = ({posts}) => {
-
+  
   // defining a useRouter Hook!
   const router = useRouter();
   // Call this function whenever you want to
@@ -72,8 +74,8 @@ const Home = ({posts}) => {
       <main className={styles.main}>
         <div className={styles.grid}>
             {posts.map((post) => 
-            
             (
+              
               <div key={post._id} className={styles.card}>
                 <h3>{post.name}</h3>
                 <p>{post.caption}</p><br></br>
@@ -87,7 +89,8 @@ const Home = ({posts}) => {
             )}
         </div>
       </main>
-
+        
+      {/*  Create Form  */}
       <footer className={styles.footer}>
         <form onSubmit={formik.handleSubmit}>
           <label htmlFor="name">Name</label>
