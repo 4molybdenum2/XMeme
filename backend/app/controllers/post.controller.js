@@ -1,6 +1,5 @@
 const Post = require('../models/post.model.js');
 
-
 // Create and Save a new post
 exports.create = async (req, res) => {
     // Validate request
@@ -9,6 +8,7 @@ exports.create = async (req, res) => {
 
     // Create a post
     const post = new Post({
+        
         name: req.body.name || "Anonymous", 
         caption: req.body.caption,
         url: req.body.url
