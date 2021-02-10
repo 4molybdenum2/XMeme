@@ -52,7 +52,7 @@ const swaggerOptions = {
     swaggerDefinition:{
         info:{
             title: 'XMeme API',
-            description: 'XMeme API Information'
+            description: 'XMeme API Information',
         },
         host: ['localhost:8081']
     },
