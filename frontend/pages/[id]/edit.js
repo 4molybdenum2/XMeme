@@ -25,7 +25,7 @@ const EditPost = () => {
             console.log(error)
         }
     }
-  });
+});
 
 
   return (

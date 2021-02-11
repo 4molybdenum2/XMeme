@@ -76,7 +76,7 @@ const Home = ({posts}) => {
                 <p>{post.caption}</p><br></br>
                 <img src={post.url} height="300" width="300" alt="Picture of Meme"/>
                 <Button variant="dark mt-2" onClick={()=>deletePost({post})}>Delete</Button>&nbsp;&nbsp;
-                <Link href={`/${post._id}/edit`}>
+                <Link href={`/${post.id}/edit`}>
                     <Button variant="dark mt-2">Edit</Button>
                 </Link>
               </div>
