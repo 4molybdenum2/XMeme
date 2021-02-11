@@ -7,7 +7,6 @@ import {Button , Modal} from 'react-bootstrap';
 import Link from 'next/link'
 import {useState} from 'react'
 
-
 const Home = ({posts}) => {
   
   // defining a useRouter Hook!
@@ -18,13 +17,10 @@ const Home = ({posts}) => {
     router.replace(router.asPath);
   }
 
-
-  //async function to update a post
+  //async function to delete a post
   async function deletePost ({post}){
-    console.log(post)
     try{
-      const res = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${post._id}`);
-      console.log('deleted')
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${post.id}`);
     }
     catch(err){
       console.error(err)
@@ -33,7 +29,6 @@ const Home = ({posts}) => {
     refreshData();
 
   }
-
 
   // defining the formik hook
   const formik = useFormik({
@@ -76,7 +71,7 @@ const Home = ({posts}) => {
             {posts.map((post) => 
             (
               
-              <div key={post._id} className={styles.card}>
+              <div key={post.id} className={styles.card}>
                 <h3>{post.name}</h3>
                 <p>{post.caption}</p><br></br>
                 <img src={post.url} height="300" width="300" alt="Picture of Meme"/>
