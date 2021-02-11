@@ -93,6 +93,7 @@ const Home = ({posts}) => {
       {/*  Create Form  */}
       <footer className={styles.footer}>
         <form onSubmit={formik.handleSubmit}>
+          <div className={styles.container}>
           <label htmlFor="name">Name</label>
           &nbsp;&nbsp;
           <input
@@ -127,6 +128,7 @@ const Home = ({posts}) => {
           />
           &nbsp;&nbsp;
           <button type="submit">Submit</button>
+        </div>
         </form>
       </footer>
     </div>

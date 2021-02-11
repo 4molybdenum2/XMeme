@@ -131,4 +131,14 @@
     width: 100%;
     flex-direction: column;
   }
+
+  .footer{
+    height: 30%;
+  }
+}
+
+@media (max-width: 900px){
+  .container{
+    padding-left: 1rem;
+  }
 }
