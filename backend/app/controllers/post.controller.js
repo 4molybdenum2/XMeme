@@ -75,7 +75,7 @@ exports.create = async (req, res) => {
 
 exports.findAll = async (req, res) => {
     try{
-        const Posts = await Post.aggregate([{$project:{_id:0 , id: '$_id',name: '$name' , caption: '$caption', url: '$url'}}, {$sort: {createdAt: -1}} , {$limit: 100}])
+        const Posts = await Post.aggregate([{$sort: { createdAt: -1}} , { $project: { _id:0, id:'$_id',name: '$name',caption:'$caption',url:'$url'}}])
         res.json(Posts)
     }
     catch(err){
